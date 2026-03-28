@@ -131,6 +131,7 @@
 				B10009 /* TimePickerSheet.swift */,
 				B10010 /* ActiveTimerView.swift */,
 				D10005 /* Components */,
+				E503B40D4FF447C8A4DE0235 /* Prototypes */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -142,6 +143,7 @@
 				B10012 /* ModeCard.swift */,
 				B10018 /* NowPlayingBar.swift */,
 				B10013 /* RoundStepper.swift */,
+				B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -159,6 +161,8 @@
 			isa = PBXGroup;
 			children = (
 				B10015 /* ZentimeTheme.swift */,
+				EFFE61DE51DE4910A1359A86 /* PrototypeTheme.swift */,
+				861AACB0332D483FA5A53069 /* ThemeManager.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
