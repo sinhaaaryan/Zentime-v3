@@ -6,8 +6,11 @@ struct SetupView: View {
     @State private var showTimePicker = false
     @State private var appeared = false
     @State private var taskText = ""
+    @Environment(ThemeManager.self) private var themeManager
 
     var body: some View {
+        let theme = themeManager.currentPrototype
+
         VStack(spacing: 0) {
             Spacer().frame(height: 20)
 
@@ -15,11 +18,11 @@ struct SetupView: View {
             HStack(alignment: .center, spacing: 12) {
                 Image(systemName: mode.iconName)
                     .font(.system(size: 36))
-                    .foregroundStyle(ZentimeTheme.primaryText)
+                    .foregroundStyle(theme.primaryText)
 
                 Text(mode.title)
                     .font(ZentimeTheme.titleFont)
-                    .foregroundStyle(ZentimeTheme.primaryText)
+                    .foregroundStyle(theme.primaryText)
 
                 Spacer()
             }
@@ -33,16 +36,16 @@ struct SetupView: View {
             if mode == .focus || mode == .deepWork {
                 TextField("What's getting done?", text: $taskText)
                     .font(ZentimeTheme.bodyFont)
-                    .foregroundStyle(ZentimeTheme.primaryText)
-                    .tint(ZentimeTheme.primaryText)
+                    .foregroundStyle(theme.primaryText)
+                    .tint(theme.accentColor)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 14)
                     .background(
                         RoundedRectangle(cornerRadius: ZentimeTheme.cardCornerRadius)
-                            .fill(ZentimeTheme.glassBackground)
+                            .fill(theme.cardGlassFill)
                             .overlay(
                                 RoundedRectangle(cornerRadius: ZentimeTheme.cardCornerRadius)
-                                    .stroke(ZentimeTheme.glassBorder, lineWidth: 1)
+                                    .stroke(theme.cardBorderColor, lineWidth: theme.borderLineWidth)
                             )
                     )
                     .padding(.horizontal, ZentimeTheme.spacing)
@@ -63,14 +66,14 @@ struct SetupView: View {
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
                             Text("\(viewModel.config.focusMinutes)")
                                 .font(.system(size: 48, weight: .bold))
-                                .foregroundStyle(ZentimeTheme.primaryText)
+                                .foregroundStyle(theme.primaryText)
                             Text("min")
                                 .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(ZentimeTheme.primaryText)
+                                .foregroundStyle(theme.primaryText)
                         }
                         Text(mode.hasBreaks ? "Focus" : "Duration")
                             .font(.system(size: 14, weight: .regular))
-                            .foregroundStyle(ZentimeTheme.secondaryText)
+                            .foregroundStyle(theme.secondaryText)
                     }
 
                     if mode.hasBreaks {
@@ -81,14 +84,14 @@ struct SetupView: View {
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
                                 Text("\(viewModel.config.breakMinutes)")
                                     .font(.system(size: 48, weight: .bold))
-                                    .foregroundStyle(ZentimeTheme.primaryText)
+                                    .foregroundStyle(theme.primaryText)
                                 Text("min")
                                     .font(.system(size: 14, weight: .regular))
-                                    .foregroundStyle(ZentimeTheme.primaryText)
+                                    .foregroundStyle(theme.primaryText)
                             }
                             Text("Short Break")
                                 .font(.system(size: 14, weight: .regular))
-                                .foregroundStyle(ZentimeTheme.secondaryText)
+                                .foregroundStyle(theme.secondaryText)
                         }
                     }
 
@@ -96,16 +99,16 @@ struct SetupView: View {
 
                     Image(systemName: "chevron.right")
                         .font(.system(size: 14, weight: .semibold))
-                        .foregroundStyle(ZentimeTheme.secondaryText)
+                        .foregroundStyle(theme.secondaryText)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 20)
                 .background(
                     RoundedRectangle(cornerRadius: ZentimeTheme.cardCornerRadius)
-                        .fill(ZentimeTheme.glassBackground)
+                        .fill(theme.cardGlassFill)
                         .overlay(
                             RoundedRectangle(cornerRadius: ZentimeTheme.cardCornerRadius)
-                                .stroke(ZentimeTheme.glassBorder, lineWidth: 0.5)
+                                .stroke(theme.cardBorderColor, lineWidth: theme.borderLineWidth)
                         )
                 )
             }
@@ -132,10 +135,10 @@ struct SetupView: View {
             } label: {
                 Text("Start")
                     .font(ZentimeTheme.headlineFont)
-                    .foregroundStyle(ZentimeTheme.background)
+                    .foregroundStyle(theme.accentForeground)
                     .frame(maxWidth: .infinity)
                     .frame(height: 56)
-                    .background(ZentimeTheme.accent)
+                    .background(theme.accentColor)
                     .clipShape(RoundedRectangle(cornerRadius: ZentimeTheme.buttonCornerRadius))
             }
             .padding(.horizontal, ZentimeTheme.spacing)
@@ -146,7 +149,7 @@ struct SetupView: View {
             if mode.hasRounds {
                 Text("\(viewModel.config.rounds) × Focus Time + \(viewModel.config.rounds) × Short Break")
                     .font(ZentimeTheme.smallCaptionFont)
-                    .foregroundStyle(ZentimeTheme.secondaryText)
+                    .foregroundStyle(theme.secondaryText)
                     .padding(.top, 8)
                     .opacity(appeared ? 1 : 0)
             }
@@ -154,9 +157,11 @@ struct SetupView: View {
             Spacer().frame(height: 40)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(ZentimeTheme.background)
+        .background(ThemedBackground(theme: theme))
         .navigationBarTitleDisplayMode(.inline)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbarBackground(theme.backgroundColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .sheet(isPresented: $showTimePicker) {
             TimePickerSheet(config: $viewModel.config, mode: mode)
                 .presentationDetents([.medium])
@@ -173,10 +178,12 @@ struct SetupView: View {
 
 #Preview("Focus") {
     SetupView(mode: .focus, viewModel: TimerViewModel())
+        .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
 }
 
 #Preview("Deep Work") {
     SetupView(mode: .deepWork, viewModel: TimerViewModel())
+        .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
 }

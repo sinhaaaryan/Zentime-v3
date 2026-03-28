@@ -3,10 +3,13 @@ import SwiftUI
 struct ActiveTimerView: View {
     @Bindable var viewModel: TimerViewModel
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(ThemeManager.self) private var themeManager
     @State private var appeared = false
     @State private var isPulsing = false
 
     var body: some View {
+        let theme = themeManager.currentPrototype
+
         VStack(spacing: 0) {
             // Close button — dismisses without stopping audio
             HStack {
@@ -17,14 +20,14 @@ struct ActiveTimerView: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 18, weight: .medium))
-                        .foregroundStyle(ZentimeTheme.secondaryText)
+                        .foregroundStyle(theme.secondaryText)
                         .frame(width: 36, height: 36)
                         .background(
                             Circle()
-                                .fill(ZentimeTheme.glassBackground)
+                                .fill(theme.cardGlassFill)
                                 .overlay(
                                     Circle()
-                                        .stroke(ZentimeTheme.glassBorder, lineWidth: 0.5)
+                                        .stroke(theme.cardBorderColor, lineWidth: 0.5)
                                 )
                         )
                 }
@@ -37,7 +40,7 @@ struct ActiveTimerView: View {
             // Phase label
             Text(viewModel.phase.label)
                 .font(ZentimeTheme.headlineFont)
-                .foregroundStyle(ZentimeTheme.secondaryText)
+                .foregroundStyle(theme.secondaryText)
                 .padding(.bottom, 8)
                 .opacity(appeared ? 1 : 0)
 
@@ -45,19 +48,52 @@ struct ActiveTimerView: View {
             if viewModel.mode.hasRounds {
                 Text(viewModel.roundsDisplay)
                     .font(ZentimeTheme.captionFont)
-                    .foregroundStyle(ZentimeTheme.secondaryText)
+                    .foregroundStyle(theme.secondaryText)
                     .padding(.bottom, 16)
                     .opacity(appeared ? 1 : 0)
             }
 
             // Circular progress ring with timer
             ZStack {
-                CircularProgressRing(progress: viewModel.progress)
+                // Nebula: extra orb glow behind ring
+                if theme == .nebula {
+                    Ellipse()
+                        .fill(
+                            RadialGradient(
+                                colors: [
+                                    Color(red: 0.50, green: 0.10, blue: 0.90).opacity(0.40),
+                                    .clear
+                                ],
+                                center: .center,
+                                startRadius: 0,
+                                endRadius: 160
+                            )
+                        )
+                        .frame(width: 320, height: 320)
+                        .blur(radius: 45)
+                        .scaleEffect(isPulsing ? 1.08 : 0.95)
+                }
+
+                CircularProgressRing(
+                    progress: viewModel.progress,
+                    progressStyle: AnyShapeStyle(theme.ringGradient),
+                    glowColor: theme.ringGlowColor
+                )
+                .id(theme.rawValue)  // force re-render on theme change
+
+                // Sakura: blossom watermark
+                if theme == .sakura {
+                    Text("✿")
+                        .font(.system(size: 180))
+                        .foregroundStyle(Color(red: 0.90, green: 0.55, blue: 0.70))
+                        .opacity(0.04)
+                        .allowsHitTesting(false)
+                }
 
                 VStack(spacing: 4) {
                     Text(viewModel.formattedTime)
-                        .font(ZentimeTheme.timerFont)
-                        .foregroundStyle(ZentimeTheme.primaryText)
+                        .font(theme.timerFont)
+                        .foregroundStyle(theme.primaryText)
                         .contentTransition(.numericText())
                 }
             }
@@ -75,9 +111,9 @@ struct ActiveTimerView: View {
                 } label: {
                     Text("Done")
                         .font(ZentimeTheme.headlineFont)
-                        .foregroundStyle(ZentimeTheme.background)
+                        .foregroundStyle(theme.accentForeground)
                         .frame(width: 160, height: 56)
-                        .background(ZentimeTheme.accent)
+                        .background(theme.accentColor)
                         .clipShape(RoundedRectangle(cornerRadius: ZentimeTheme.buttonCornerRadius))
                 }
                 .padding(.bottom, 60)
@@ -92,14 +128,14 @@ struct ActiveTimerView: View {
                     } label: {
                         Image(systemName: "arrow.counterclockwise")
                             .font(.system(size: 20))
-                            .foregroundStyle(ZentimeTheme.primaryText)
+                            .foregroundStyle(theme.primaryText)
                             .frame(width: 52, height: 52)
                             .background(
                                 Circle()
-                                    .fill(ZentimeTheme.glassBackground)
+                                    .fill(theme.cardGlassFill)
                                     .overlay(
                                         Circle()
-                                            .stroke(ZentimeTheme.glassBorder, lineWidth: 0.5)
+                                            .stroke(theme.cardBorderColor, lineWidth: 0.5)
                                     )
                             )
                     }
@@ -111,9 +147,9 @@ struct ActiveTimerView: View {
                     } label: {
                         Image(systemName: pauseIcon)
                             .font(.system(size: 24))
-                            .foregroundStyle(ZentimeTheme.background)
+                            .foregroundStyle(theme.accentForeground)
                             .frame(width: 72, height: 72)
-                            .background(ZentimeTheme.accent)
+                            .background(theme.accentColor)
                             .clipShape(Circle())
                     }
 
@@ -124,14 +160,14 @@ struct ActiveTimerView: View {
                     } label: {
                         Image(systemName: "stop.fill")
                             .font(.system(size: 20))
-                            .foregroundStyle(ZentimeTheme.primaryText)
+                            .foregroundStyle(theme.primaryText)
                             .frame(width: 52, height: 52)
                             .background(
                                 Circle()
-                                    .fill(ZentimeTheme.glassBackground)
+                                    .fill(theme.cardGlassFill)
                                     .overlay(
                                         Circle()
-                                            .stroke(ZentimeTheme.glassBorder, lineWidth: 0.5)
+                                            .stroke(theme.cardBorderColor, lineWidth: 0.5)
                                     )
                             )
                     }
@@ -142,7 +178,7 @@ struct ActiveTimerView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(ZentimeTheme.background)
+        .background(ThemedBackground(theme: theme))
         .onAppear {
             withAnimation(.spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)) {
                 appeared = true
@@ -177,6 +213,7 @@ struct ActiveTimerView: View {
     vm.selectMode(.focus)
     vm.start()
     return ActiveTimerView(viewModel: vm)
+        .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
 }
 
@@ -186,5 +223,6 @@ struct ActiveTimerView: View {
     vm.start()
     vm.togglePause()
     return ActiveTimerView(viewModel: vm)
+        .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
 }

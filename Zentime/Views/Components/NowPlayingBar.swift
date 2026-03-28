@@ -3,8 +3,11 @@ import SwiftUI
 struct NowPlayingBar: View {
     var viewModel: TimerViewModel
     @State private var isAnimating = false
+    @Environment(ThemeManager.self) private var themeManager
 
     var body: some View {
+        let theme = themeManager.currentPrototype
+
         Button {
             HapticManager.impact(.light)
             viewModel.showActiveTimer = true
@@ -13,16 +16,16 @@ struct NowPlayingBar: View {
                 // Mode icon with pulsing ring
                 ZStack {
                     Circle()
-                        .fill(ZentimeTheme.cardBackgroundLighter)
+                        .fill(theme.cardGlassFill.opacity(2))
                         .frame(width: 40, height: 40)
 
                     Image(systemName: viewModel.mode.iconName)
                         .font(.system(size: 18))
-                        .foregroundStyle(ZentimeTheme.primaryText)
+                        .foregroundStyle(theme.primaryText)
 
                     // Subtle animated ring around icon
                     Circle()
-                        .stroke(ZentimeTheme.primaryText.opacity(0.3), lineWidth: 1.5)
+                        .stroke(theme.accentColor.opacity(0.5), lineWidth: 1.5)
                         .frame(width: 40, height: 40)
                         .scaleEffect(isAnimating ? 1.15 : 1.0)
                         .opacity(isAnimating ? 0 : 0.6)
@@ -32,12 +35,12 @@ struct NowPlayingBar: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Playing \(viewModel.mode.title)")
                         .font(ZentimeTheme.bodyFont)
-                        .foregroundStyle(ZentimeTheme.primaryText)
+                        .foregroundStyle(theme.primaryText)
                         .lineLimit(1)
 
                     Text(viewModel.formattedTime)
                         .font(ZentimeTheme.smallCaptionFont)
-                        .foregroundStyle(ZentimeTheme.secondaryText)
+                        .foregroundStyle(theme.secondaryText)
                         .monospacedDigit()
                 }
 
@@ -50,11 +53,11 @@ struct NowPlayingBar: View {
                 } label: {
                     Image(systemName: pauseIcon)
                         .font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(ZentimeTheme.primaryText)
+                        .foregroundStyle(theme.primaryText)
                         .frame(width: 40, height: 40)
                         .background(
                             Circle()
-                                .fill(ZentimeTheme.cardBackgroundLighter)
+                                .fill(theme.cardGlassFill.opacity(2))
                         )
                 }
             }
@@ -62,12 +65,12 @@ struct NowPlayingBar: View {
             .padding(.vertical, 12)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(ZentimeTheme.glassBackground)
+                    .fill(theme.cardGlassFill)
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
-                            .stroke(ZentimeTheme.glassBorder, lineWidth: 0.5)
+                            .stroke(theme.cardBorderColor, lineWidth: 0.5)
                     )
-                    .shadow(color: Color.white.opacity(0.05), radius: 20, y: -5)
+                    .shadow(color: theme.accentColor.opacity(0.08), radius: 20, y: -5)
             )
         }
         .buttonStyle(.plain)
@@ -93,5 +96,6 @@ struct NowPlayingBar: View {
     return NowPlayingBar(viewModel: vm)
         .padding()
         .background(ZentimeTheme.background)
+        .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
 }

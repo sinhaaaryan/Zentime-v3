@@ -26,7 +26,17 @@
 		A10017 /* brain_reset_852hz_5m.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B10017 /* brain_reset_852hz_5m.mp3 */; };
 		A10018 /* NowPlayingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10018 /* NowPlayingBar.swift */; };
 		A10019 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10019 /* HapticManager.swift */; };
-/* End PBXBuildFile section */
+		FBD7073940CB430EB15B8797 /* PrototypeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFE61DE51DE4910A1359A86 /* PrototypeTheme.swift */; };
+		4C93FBB270B24FC7AD2F3BBC /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861AACB0332D483FA5A53069 /* ThemeManager.swift */; };
+		10CD1806B98A4C2BA78FE8E0 /* StarfieldLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C53282E128F94831B022578F /* StarfieldLayer.swift */; };
+		28D7422948074B1AB80BED07 /* AuroraLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08D8EA15A69E407FA5C0DE38 /* AuroraLayer.swift */; };
+		52D1A9935AAD4FE590489FB2 /* EmberLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AF645F0B7D04A6F8E82BCDC /* EmberLayer.swift */; };
+		F57C7FCA71CF43948437E221 /* PetalLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116EB593D740409B844B37B0 /* PetalLayer.swift */; };
+		8DAAE65B1BB24C1B978C9ED7 /* MatrixRainLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF45E7B8283642DB88C7201E /* MatrixRainLayer.swift */; };
+		3DDC9FEC1F214577BB1E4C24 /* ThemedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88664C265D414C478E1CB892 /* ThemedBackground.swift */; };
+		031A6C7C712C4C35A9F355D5 /* ThemedModeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */; };
+		A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */; };
+		/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B10000 /* Zentime.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Zentime.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -49,7 +59,17 @@
 		B10017 /* brain_reset_852hz_5m.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = brain_reset_852hz_5m.mp3; sourceTree = "<group>"; };
 		B10018 /* NowPlayingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingBar.swift; sourceTree = "<group>"; };
 		B10019 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
-/* End PBXFileReference section */
+		EFFE61DE51DE4910A1359A86 /* PrototypeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeTheme.swift; sourceTree = "<group>"; };
+		861AACB0332D483FA5A53069 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		C53282E128F94831B022578F /* StarfieldLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarfieldLayer.swift; sourceTree = "<group>"; };
+		08D8EA15A69E407FA5C0DE38 /* AuroraLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuroraLayer.swift; sourceTree = "<group>"; };
+		6AF645F0B7D04A6F8E82BCDC /* EmberLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmberLayer.swift; sourceTree = "<group>"; };
+		116EB593D740409B844B37B0 /* PetalLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PetalLayer.swift; sourceTree = "<group>"; };
+		AF45E7B8283642DB88C7201E /* MatrixRainLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrixRainLayer.swift; sourceTree = "<group>"; };
+		88664C265D414C478E1CB892 /* ThemedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedBackground.swift; sourceTree = "<group>"; };
+		DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedModeCard.swift; sourceTree = "<group>"; };
+		B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcher.swift; sourceTree = "<group>"; };
+		/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C10001 /* Frameworks */ = {
@@ -160,7 +180,31 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-/* End PBXGroup section */
+
+		52B05C794FC645358CE0D921 /* AnimationLayers */ = {
+			isa = PBXGroup;
+			children = (
+								C53282E128F94831B022578F /* StarfieldLayer.swift */,
+				08D8EA15A69E407FA5C0DE38 /* AuroraLayer.swift */,
+				6AF645F0B7D04A6F8E82BCDC /* EmberLayer.swift */,
+				116EB593D740409B844B37B0 /* PetalLayer.swift */,
+				AF45E7B8283642DB88C7201E /* MatrixRainLayer.swift */,
+			);
+			path = AnimationLayers;
+			sourceTree = "<group>";
+		};
+
+		E503B40D4FF447C8A4DE0235 /* Prototypes */ = {
+			isa = PBXGroup;
+			children = (
+								52B05C794FC645358CE0D921 /* AnimationLayers */,
+				88664C265D414C478E1CB892 /* ThemedBackground.swift */,
+				DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */,
+			);
+			path = Prototypes;
+			sourceTree = "<group>";
+		};
+		/* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		E10001 /* Zentime */ = {
@@ -247,6 +291,17 @@
 				A10015 /* ZentimeTheme.swift in Sources */,
 				A10018 /* NowPlayingBar.swift in Sources */,
 				A10019 /* HapticManager.swift in Sources */,
+			
+				FBD7073940CB430EB15B8797 /* PrototypeTheme.swift in Sources */,
+				4C93FBB270B24FC7AD2F3BBC /* ThemeManager.swift in Sources */,
+				10CD1806B98A4C2BA78FE8E0 /* StarfieldLayer.swift in Sources */,
+				28D7422948074B1AB80BED07 /* AuroraLayer.swift in Sources */,
+				52D1A9935AAD4FE590489FB2 /* EmberLayer.swift in Sources */,
+				F57C7FCA71CF43948437E221 /* PetalLayer.swift in Sources */,
+				8DAAE65B1BB24C1B978C9ED7 /* MatrixRainLayer.swift in Sources */,
+				3DDC9FEC1F214577BB1E4C24 /* ThemedBackground.swift in Sources */,
+				031A6C7C712C4C35A9F355D5 /* ThemedModeCard.swift in Sources */,
+				A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
