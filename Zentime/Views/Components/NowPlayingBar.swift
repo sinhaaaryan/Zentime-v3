@@ -90,12 +90,11 @@ struct NowPlayingBar: View {
 }
 
 #Preview {
-    let vm = TimerViewModel()
-    vm.selectMode(.focus)
-    vm.start()
-    return NowPlayingBar(viewModel: vm)
+    @Previewable @State var vm = TimerViewModel()
+    NowPlayingBar(viewModel: vm)
         .padding()
         .background(ZentimeTheme.background)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .onAppear { vm.selectMode(.focus); vm.start() }
 }

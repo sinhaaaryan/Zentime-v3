@@ -98,10 +98,9 @@ struct HomeView: View {
 
 #Preview("Session Active") {
     @Previewable @State var path = NavigationPath()
-    let vm = TimerViewModel()
-    vm.selectMode(.focus)
-    vm.start()
-    return HomeView(viewModel: vm, navigationPath: $path)
+    @Previewable @State var vm = TimerViewModel()
+    HomeView(viewModel: vm, navigationPath: $path)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .onAppear { vm.selectMode(.focus); vm.start() }
 }

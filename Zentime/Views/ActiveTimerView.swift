@@ -209,20 +209,17 @@ struct ActiveTimerView: View {
 }
 
 #Preview("Running") {
-    let vm = TimerViewModel()
-    vm.selectMode(.focus)
-    vm.start()
-    return ActiveTimerView(viewModel: vm)
+    @Previewable @State var vm = TimerViewModel()
+    ActiveTimerView(viewModel: vm)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .onAppear { vm.selectMode(.focus); vm.start() }
 }
 
 #Preview("Paused") {
-    let vm = TimerViewModel()
-    vm.selectMode(.focus)
-    vm.start()
-    vm.togglePause()
-    return ActiveTimerView(viewModel: vm)
+    @Previewable @State var vm = TimerViewModel()
+    ActiveTimerView(viewModel: vm)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .onAppear { vm.selectMode(.focus); vm.start(); vm.togglePause() }
 }
