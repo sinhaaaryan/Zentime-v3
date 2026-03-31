@@ -73,87 +73,9 @@ struct SpaceBackgroundLayer: View {
                 TimelineView(.animation) { timeline in
                     Canvas { context, size in
                         let time = timeline.date.timeIntervalSinceReferenceDate
-
-                        // Draw twinkling stars
-                        for star in stars {
-                            let twinkle = (sin(time * 1.5 + star.phase) + 1.0) / 2.0
-                            let opacity = star.baseOpacity * (0.2 + 0.8 * twinkle)
-                            context.opacity = opacity
-                            let rect = CGRect(
-                                x: star.x * size.width - star.radius,
-                                y: star.y * size.height - star.radius,
-                                width: star.radius * 2,
-                                height: star.radius * 2
-                            )
-                            context.fill(Path(ellipseIn: rect), with: .color(.white))
-                        }
-
-                        // Draw orbit rings
-                        for ring in orbitRings {
-                            let cx = ring.centerX * size.width
-                            let cy = ring.centerY * size.height
-
-                            // Draw the ellipse track
-                            context.opacity = ring.opacity * 0.5
-                            var trackPath = Path()
-                            for i in 0...100 {
-                                let angle = Double(i) / 100.0 * 2 * .pi
-                                let px = cos(angle) * ring.radiusX
-                                let py = sin(angle) * ring.radiusY
-                                let rotRad = ring.rotation * .pi / 180
-                                let rx = px * cos(rotRad) - py * sin(rotRad) + cx
-                                let ry = px * sin(rotRad) + py * cos(rotRad) + cy
-                                if i == 0 {
-                                    trackPath.move(to: CGPoint(x: rx, y: ry))
-                                } else {
-                                    trackPath.addLine(to: CGPoint(x: rx, y: ry))
-                                }
-                            }
-                            trackPath.closeSubpath()
-                            context.stroke(trackPath, with: .color(.white), lineWidth: 0.5)
-
-                            // Draw orbiting dots
-                            for d in 0..<ring.dotCount {
-                                let baseAngle = Double(d) / Double(ring.dotCount) * 2 * .pi
-                                let angle = baseAngle + time * ring.speed
-                                let px = cos(angle) * ring.radiusX
-                                let py = sin(angle) * ring.radiusY
-                                let rotRad = ring.rotation * .pi / 180
-                                let rx = px * cos(rotRad) - py * sin(rotRad) + cx
-                                let ry = px * sin(rotRad) + py * cos(rotRad) + cy
-
-                                context.opacity = ring.opacity * 2.5
-                                let dotRect = CGRect(
-                                    x: rx - ring.dotRadius,
-                                    y: ry - ring.dotRadius,
-                                    width: ring.dotRadius * 2,
-                                    height: ring.dotRadius * 2
-                                )
-                                context.fill(Path(ellipseIn: dotRect), with: .color(.white))
-                            }
-                        }
-
-                        // Draw shooting stars
-                        for star in shootingStars {
-                            let age = time - star.createdAt
-                            guard age > 0 && age < 1.5 else { continue }
-
-                            let progress = age / 1.5
-                            let fadeIn = min(progress * 4, 1.0)
-                            let fadeOut = max(0, 1.0 - (progress - 0.5) * 2)
-                            let alpha = min(fadeIn, fadeOut) * star.opacity
-
-                            let currentX = star.x + CGFloat(age) * star.speed * cos(CGFloat(star.angle))
-                            let currentY = star.y + CGFloat(age) * star.speed * sin(CGFloat(star.angle))
-                            let tailX = currentX - star.length * cos(CGFloat(star.angle))
-                            let tailY = currentY - star.length * sin(CGFloat(star.angle))
-
-                            context.opacity = alpha
-                            var path = Path()
-                            path.move(to: CGPoint(x: tailX * size.width, y: tailY * size.height))
-                            path.addLine(to: CGPoint(x: currentX * size.width, y: currentY * size.height))
-                            context.stroke(path, with: .color(.white), lineWidth: 1.2)
-                        }
+                        drawStars(context: &context, size: size, time: time)
+                        drawOrbitRings(context: &context, size: size, time: time)
+                        drawShootingStars(context: &context, size: size, time: time)
                     }
                 }
             }
@@ -162,6 +84,91 @@ struct SpaceBackgroundLayer: View {
                 animateNebula()
                 startShootingStarTimer()
             }
+        }
+    }
+
+    private func drawStars(context: inout GraphicsContext, size: CGSize, time: TimeInterval) {
+        for star in stars {
+            let twinkle = (sin(time * 1.5 + star.phase) + 1.0) / 2.0
+            let opacity = star.baseOpacity * (0.2 + 0.8 * twinkle)
+            context.opacity = opacity
+            let rect = CGRect(
+                x: star.x * size.width - star.radius,
+                y: star.y * size.height - star.radius,
+                width: star.radius * 2,
+                height: star.radius * 2
+            )
+            context.fill(Path(ellipseIn: rect), with: .color(.white))
+        }
+    }
+
+    private func drawOrbitRings(context: inout GraphicsContext, size: CGSize, time: TimeInterval) {
+        for ring in orbitRings {
+            let cx: CGFloat = ring.centerX * size.width
+            let cy: CGFloat = ring.centerY * size.height
+            let rotRad: CGFloat = CGFloat(ring.rotation * .pi / 180)
+            let cosRot: CGFloat = cos(rotRad)
+            let sinRot: CGFloat = sin(rotRad)
+
+            context.opacity = ring.opacity * 0.5
+            var trackPath = Path()
+            for i in 0...100 {
+                let angle: CGFloat = CGFloat(i) / 100.0 * 2 * .pi
+                let px: CGFloat = cos(angle) * ring.radiusX
+                let py: CGFloat = sin(angle) * ring.radiusY
+                let rx: CGFloat = px * cosRot - py * sinRot + cx
+                let ry: CGFloat = px * sinRot + py * cosRot + cy
+                if i == 0 {
+                    trackPath.move(to: CGPoint(x: rx, y: ry))
+                } else {
+                    trackPath.addLine(to: CGPoint(x: rx, y: ry))
+                }
+            }
+            trackPath.closeSubpath()
+            context.stroke(trackPath, with: .color(.white), lineWidth: 0.5)
+
+            for d in 0..<ring.dotCount {
+                let baseAngle: CGFloat = CGFloat(d) / CGFloat(ring.dotCount) * 2 * .pi
+                let angle: CGFloat = baseAngle + CGFloat(time * ring.speed)
+                let px: CGFloat = cos(angle) * ring.radiusX
+                let py: CGFloat = sin(angle) * ring.radiusY
+                let rx: CGFloat = px * cosRot - py * sinRot + cx
+                let ry: CGFloat = px * sinRot + py * cosRot + cy
+                context.opacity = ring.opacity * 2.5
+                let dotRect = CGRect(
+                    x: rx - ring.dotRadius,
+                    y: ry - ring.dotRadius,
+                    width: ring.dotRadius * 2,
+                    height: ring.dotRadius * 2
+                )
+                context.fill(Path(ellipseIn: dotRect), with: .color(.white))
+            }
+        }
+    }
+
+    private func drawShootingStars(context: inout GraphicsContext, size: CGSize, time: TimeInterval) {
+        for star in shootingStars {
+            let age: Double = time - star.createdAt
+            guard age > 0 && age < 1.5 else { continue }
+
+            let progress: Double = age / 1.5
+            let fadeIn: Double = min(progress * 4, 1.0)
+            let fadeOut: Double = max(0, 1.0 - (progress - 0.5) * 2)
+            let alpha: Double = min(fadeIn, fadeOut) * star.opacity
+
+            let angleCos: CGFloat = cos(CGFloat(star.angle))
+            let angleSin: CGFloat = sin(CGFloat(star.angle))
+            let dist: CGFloat = CGFloat(age) * star.speed
+            let currentX: CGFloat = star.x + dist * angleCos
+            let currentY: CGFloat = star.y + dist * angleSin
+            let tailX: CGFloat = currentX - star.length * angleCos
+            let tailY: CGFloat = currentY - star.length * angleSin
+
+            context.opacity = alpha
+            var path = Path()
+            path.move(to: CGPoint(x: tailX * size.width, y: tailY * size.height))
+            path.addLine(to: CGPoint(x: currentX * size.width, y: currentY * size.height))
+            context.stroke(path, with: .color(.white), lineWidth: 1.2)
         }
     }
 
