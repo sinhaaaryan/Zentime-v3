@@ -178,7 +178,17 @@ struct ActiveTimerView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(ThemedBackground(theme: theme))
+        .background {
+            ZStack {
+                if theme == .classic {
+                    Color.black.ignoresSafeArea()
+                    GalacticBackgroundLayer(isActive: true)
+                        .ignoresSafeArea()
+                } else {
+                    ThemedBackground(theme: theme)
+                }
+            }
+        }
         .onAppear {
             withAnimation(.spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)) {
                 appeared = true
