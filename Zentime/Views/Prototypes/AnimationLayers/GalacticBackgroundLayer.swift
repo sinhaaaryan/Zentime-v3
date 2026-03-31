@@ -32,6 +32,7 @@ struct GalacticBackgroundLayer: View {
     @State private var comets: [Comet] = []
     @State private var nebulaOffset1: CGSize = .zero
     @State private var nebulaOffset2: CGSize = .zero
+    @State private var cometTimer: Timer?
 
     // Dust cloud colours (warm arm / cool arm)
     private let armColorWarm = Color(red: 1.00, green: 0.90, blue: 0.55)  // golden
@@ -92,6 +93,10 @@ struct GalacticBackgroundLayer: View {
                 animateNebula()
                 scheduleCometSpawner()
             }
+            .onDisappear {
+                cometTimer?.invalidate()
+                cometTimer = nil
+            }
         }
     }
 
@@ -106,7 +111,7 @@ struct GalacticBackgroundLayer: View {
                 radius: CGFloat.random(in: 0.4...2.0),
                 baseOpacity: Double.random(in: 0.25...0.85),
                 phase: Double.random(in: 0...(2 * .pi)),
-                colorIndex: [0, 0, 0, 1, 2].randomElement()!  // mostly white
+                colorIndex: [0, 0, 0, 1, 2].randomElement() ?? 0  // mostly white
             )
         }
     }
@@ -126,7 +131,7 @@ struct GalacticBackgroundLayer: View {
 
     private func scheduleCometSpawner() {
         let interval: Double = isActive ? 2.5 : 4.0
-        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
+        cometTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
             spawnComet()
         }
         // Spawn one immediately after a short delay so it doesn't start empty
@@ -275,7 +280,7 @@ struct GalacticBackgroundLayer: View {
             tailPath.addLine(to: CGPoint(x: hx, y: hy))
             context.stroke(tailPath, with: .color(.white), lineWidth: 1.0)
 
-            // Bright head dot
+            // Bright head
             context.opacity = alpha * 1.4
             let hr: CGFloat = 1.5
             context.fill(Path(ellipseIn: CGRect(x: hx - hr, y: hy - hr, width: hr * 2, height: hr * 2)), with: .color(.white))
