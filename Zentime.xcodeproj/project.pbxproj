@@ -36,6 +36,10 @@
 		3DDC9FEC1F214577BB1E4C24 /* ThemedBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88664C265D414C478E1CB892 /* ThemedBackground.swift */; };
 		031A6C7C712C4C35A9F355D5 /* ThemedModeCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */; };
 		A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */; };
+		FA000011 /* SpaceBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000001 /* SpaceBackgroundLayer.swift */; };
+		FA000031B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */; };
+		FA000012 /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000002 /* StreakCard.swift */; };
+		FA000013 /* ModeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000003 /* ModeSelector.swift */; };
 		/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +73,10 @@
 		88664C265D414C478E1CB892 /* ThemedBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedBackground.swift; sourceTree = "<group>"; };
 		DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedModeCard.swift; sourceTree = "<group>"; };
 		B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcher.swift; sourceTree = "<group>"; };
+		FA000001 /* SpaceBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceBackgroundLayer.swift; sourceTree = "<group>"; };
+		FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalacticBackgroundLayer.swift; sourceTree = "<group>"; };
+		FA000002 /* StreakCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCard.swift; sourceTree = "<group>"; };
+		FA000003 /* ModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelector.swift; sourceTree = "<group>"; };
 		/* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +152,8 @@
 				B10018 /* NowPlayingBar.swift */,
 				B10013 /* RoundStepper.swift */,
 				B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */,
+				FA000002 /* StreakCard.swift */,
+				FA000003 /* ModeSelector.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -193,6 +203,8 @@
 				6AF645F0B7D04A6F8E82BCDC /* EmberLayer.swift */,
 				116EB593D740409B844B37B0 /* PetalLayer.swift */,
 				AF45E7B8283642DB88C7201E /* MatrixRainLayer.swift */,
+				FA000001 /* SpaceBackgroundLayer.swift */,
+				FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */,
 			);
 			path = AnimationLayers;
 			sourceTree = "<group>";
@@ -306,6 +318,10 @@
 				3DDC9FEC1F214577BB1E4C24 /* ThemedBackground.swift in Sources */,
 				031A6C7C712C4C35A9F355D5 /* ThemedModeCard.swift in Sources */,
 				A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */,
+				FA000011 /* SpaceBackgroundLayer.swift in Sources */,
+				FA000031B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift in Sources */,
+				FA000012 /* StreakCard.swift in Sources */,
+				FA000013 /* ModeSelector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,9 +15,9 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            // Space background
+            // Galactic background
             Color.black.ignoresSafeArea()
-            SpaceBackgroundLayer()
+            GalacticBackgroundLayer()
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
