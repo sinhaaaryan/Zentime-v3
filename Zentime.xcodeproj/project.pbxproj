@@ -36,6 +36,7 @@
 		A10019 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10019 /* HapticManager.swift */; };
 		A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */; };
 		F57C7FCA71CF43948437E221 /* PetalLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116EB593D740409B844B37B0 /* PetalLayer.swift */; };
+		F906BB87B34150F00834245C /* AuroraBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E187BAACF204E9C17D905 /* AuroraBackgroundView.swift */; };
 		FA000011 /* SpaceBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000001 /* SpaceBackgroundLayer.swift */; };
 		FA000012 /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000002 /* StreakCard.swift */; };
 		FA000013 /* ModeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000003 /* ModeSelector.swift */; };
@@ -72,6 +73,7 @@
 		B10018 /* NowPlayingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingBar.swift; sourceTree = "<group>"; };
 		B10019 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcher.swift; sourceTree = "<group>"; };
+		BF8E187BAACF204E9C17D905 /* AuroraBackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuroraBackgroundView.swift; sourceTree = "<group>"; };
 		C53282E128F94831B022578F /* StarfieldLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarfieldLayer.swift; sourceTree = "<group>"; };
 		DCC32AF7354E4796808E0C02 /* ThemedModeCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemedModeCard.swift; sourceTree = "<group>"; };
 		EFFE61DE51DE4910A1359A86 /* PrototypeTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrototypeTheme.swift; sourceTree = "<group>"; };
@@ -92,6 +94,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		17633C6D1F74A0F3E7264632 /* Backgrounds */ = {
+			isa = PBXGroup;
+			children = (
+				BF8E187BAACF204E9C17D905 /* AuroraBackgroundView.swift */,
+			);
+			name = Backgrounds;
+			path = Backgrounds;
+			sourceTree = "<group>";
+		};
 		52B05C794FC645358CE0D921 /* AnimationLayers */ = {
 			isa = PBXGroup;
 			children = (
@@ -166,6 +177,7 @@
 				B10010 /* ActiveTimerView.swift */,
 				D10005 /* Components */,
 				E503B40D4FF447C8A4DE0235 /* Prototypes */,
+				17633C6D1F74A0F3E7264632 /* Backgrounds */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -332,6 +344,7 @@
 				FA000012 /* StreakCard.swift in Sources */,
 				FA000013 /* ModeSelector.swift in Sources */,
 				652901C31442124FA8C86FE3 /* AuroraShader.metal in Sources */,
+				F906BB87B34150F00834245C /* AuroraBackgroundView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
