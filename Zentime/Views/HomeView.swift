@@ -3,10 +3,8 @@ import SwiftUI
 struct HomeView: View {
     var viewModel: TimerViewModel
     @Binding var navigationPath: NavigationPath
-    @State private var appeared = false
     @State private var selectedMode: AppMode = .focus
     @State private var buttonScale: CGFloat = 1.0
-    @State private var glowPulse = false
     @Environment(ThemeManager.self) private var themeManager
 
     // Mock streak data — replace with real persistence later
@@ -15,9 +13,8 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            // Galactic background
-            Color.black.ignoresSafeArea()
-            GalacticBackgroundLayer()
+            // Aurora background
+            AuroraBackgroundView()
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -30,13 +27,6 @@ struct HomeView: View {
                             streakDays: streakDays,
                             weeklyGoal: 7,
                             completedDays: completedDays
-                        )
-                        .opacity(appeared ? 1 : 0)
-                        .offset(y: appeared ? 0 : 20)
-                        .animation(
-                            .spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)
-                            .delay(0.1),
-                            value: appeared
                         )
 
                         // Start Focus Button
@@ -53,17 +43,10 @@ struct HomeView: View {
                                 .background(
                                     RoundedRectangle(cornerRadius: 16)
                                         .fill(Color.white)
-                                        .shadow(color: .white.opacity(glowPulse ? 0.25 : 0.1), radius: glowPulse ? 20 : 10)
+                                        .shadow(color: .white.opacity(0.15), radius: 12)
                                 )
                         }
                         .scaleEffect(buttonScale)
-                        .opacity(appeared ? 1 : 0)
-                        .offset(y: appeared ? 0 : 20)
-                        .animation(
-                            .spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)
-                            .delay(0.25),
-                            value: appeared
-                        )
                         .simultaneousGesture(
                             DragGesture(minimumDistance: 0)
                                 .onChanged { _ in
@@ -81,24 +64,11 @@ struct HomeView: View {
                         // Mode Selector
                         VStack(spacing: 16) {
                             ModeSelector(selectedMode: $selectedMode)
-                                .opacity(appeared ? 1 : 0)
-                                .offset(y: appeared ? 0 : 15)
-                                .animation(
-                                    .spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)
-                                    .delay(0.35),
-                                    value: appeared
-                                )
 
                             // Next Session
                             Text("Next Session \(nextSessionTime)")
                                 .font(.system(size: 16, weight: .regular))
                                 .foregroundStyle(.white.opacity(0.5))
-                                .opacity(appeared ? 1 : 0)
-                                .animation(
-                                    .spring(response: ZentimeTheme.springResponse, dampingFraction: ZentimeTheme.springDamping)
-                                    .delay(0.45),
-                                    value: appeared
-                                )
                         }
 
                         Spacer().frame(height: 40)
@@ -124,12 +94,6 @@ struct HomeView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onAppear {
-            appeared = true
-            withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
-                glowPulse = true
-            }
-        }
     }
 
     // Compute a "next session" time based on current time rounded up to next hour
