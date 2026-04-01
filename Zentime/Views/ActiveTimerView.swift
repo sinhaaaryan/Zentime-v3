@@ -182,7 +182,7 @@ struct ActiveTimerView: View {
             ZStack {
                 if theme == .classic {
                     Color.black.ignoresSafeArea()
-                    GalacticBackgroundLayer(isActive: true)
+                    AuroraBackgroundView(isActive: true)
                         .ignoresSafeArea()
                 } else {
                     ThemedBackground(theme: theme)
