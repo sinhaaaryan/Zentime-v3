@@ -25,7 +25,8 @@ struct AuroraBackgroundView: View {
             GeometryReader { geo in
                 ZStack {
                     // Layer 1: Metal aurora shader
-                    Rectangle()
+                    // Color.black provides opaque pixels for the shader to operate on
+                    Color.black
                         .colorEffect(
                             ShaderLibrary.auroraEffect(
                                 .float2(geo.size),
@@ -38,6 +39,7 @@ struct AuroraBackgroundView: View {
                         drawStars(context: &context, size: size, time: t)
                     }
                 }
+                .drawingGroup()
                 .onAppear {
                     generateStars(in: geo.size)
                 }
