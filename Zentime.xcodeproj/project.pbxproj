@@ -40,7 +40,6 @@
 		FA000011 /* SpaceBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000001 /* SpaceBackgroundLayer.swift */; };
 		FA000012 /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000002 /* StreakCard.swift */; };
 		FA000013 /* ModeSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000003 /* ModeSelector.swift */; };
-		FA000031B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */; };
 		FBD7073940CB430EB15B8797 /* PrototypeTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFE61DE51DE4910A1359A86 /* PrototypeTheme.swift */; };
 /* End PBXBuildFile section */
 
@@ -80,7 +79,6 @@
 		FA000001 /* SpaceBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceBackgroundLayer.swift; sourceTree = "<group>"; };
 		FA000002 /* StreakCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCard.swift; sourceTree = "<group>"; };
 		FA000003 /* ModeSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModeSelector.swift; sourceTree = "<group>"; };
-		FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalacticBackgroundLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +110,6 @@
 				116EB593D740409B844B37B0 /* PetalLayer.swift */,
 				AF45E7B8283642DB88C7201E /* MatrixRainLayer.swift */,
 				FA000001 /* SpaceBackgroundLayer.swift */,
-				FA000021B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift */,
 			);
 			path = AnimationLayers;
 			sourceTree = "<group>";
@@ -340,7 +337,6 @@
 				031A6C7C712C4C35A9F355D5 /* ThemedModeCard.swift in Sources */,
 				A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */,
 				FA000011 /* SpaceBackgroundLayer.swift in Sources */,
-				FA000031B4C7E3D9A5820F6C /* GalacticBackgroundLayer.swift in Sources */,
 				FA000012 /* StreakCard.swift in Sources */,
 				FA000013 /* ModeSelector.swift in Sources */,
 				652901C31442124FA8C86FE3 /* AuroraShader.metal in Sources */,

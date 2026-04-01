@@ -1,0 +1,111 @@
+<h2>Aurora Color Palette</h2>
+<p class="subtitle">Which palette feels right for Zentime's focus app?</p>
+
+<style>
+.cards { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; }
+.card { flex: 1; min-width: 240px; cursor: pointer; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255,255,255,0.08); transition: border-color 0.2s, transform 0.2s; background: #080810; }
+.card:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.card.selected { border-color: #7b8cde !important; }
+.card-preview { width: 100%; height: 200px; position: relative; overflow: hidden; background: #000; }
+.card-body { padding: 16px 18px; }
+.card-body h3 { margin: 0 0 6px; font-size: 16px; color: #fff; }
+.card-body p { margin: 0; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+.aurora-band {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(38px);
+  mix-blend-mode: screen;
+  animation: auroraDrift ease-in-out infinite alternate;
+}
+@keyframes auroraDrift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(var(--dx), var(--dy)) scale(var(--ds)); }
+}
+</style>
+
+<div class="cards">
+
+  <!-- A: Arctic -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="card-preview" style="background:#000508;">
+      <div class="aurora-band" style="width:340px;height:160px;background:radial-gradient(ellipse,#00e8a0 0%,transparent 70%);top:-30px;left:-30px;opacity:0.35;--dx:25px;--dy:18px;--ds:1.1;animation-duration:7s;"></div>
+      <div class="aurora-band" style="width:260px;height:130px;background:radial-gradient(ellipse,#00c8ff 0%,transparent 70%);top:50px;right:-20px;opacity:0.28;--dx:-18px;--dy:12px;--ds:1.12;animation-duration:10s;"></div>
+      <div class="aurora-band" style="width:220px;height:100px;background:radial-gradient(ellipse,#40ffb0 0%,transparent 70%);bottom:0;left:40px;opacity:0.22;--dx:10px;--dy:-8px;--ds:0.92;animation-duration:8.5s;"></div>
+      <canvas id="canvas-a" style="position:absolute;inset:0;"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Arctic</h3>
+      <p>Teal + cyan green. Classic northern lights — cool, natural, meditative.</p>
+    </div>
+  </div>
+
+  <!-- B: Cosmic -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="card-preview" style="background:#02000f;">
+      <div class="aurora-band" style="width:320px;height:150px;background:radial-gradient(ellipse,#5533ff 0%,transparent 70%);top:-20px;left:-20px;opacity:0.38;--dx:20px;--dy:15px;--ds:1.08;animation-duration:9s;"></div>
+      <div class="aurora-band" style="width:280px;height:130px;background:radial-gradient(ellipse,#0066ff 0%,transparent 70%);top:40px;right:-30px;opacity:0.30;--dx:-15px;--dy:10px;--ds:1.14;animation-duration:7.5s;"></div>
+      <div class="aurora-band" style="width:240px;height:120px;background:radial-gradient(ellipse,#8800ee 0%,transparent 70%);bottom:-10px;left:20px;opacity:0.26;--dx:12px;--dy:-12px;--ds:0.9;animation-duration:11s;"></div>
+      <canvas id="canvas-b" style="position:absolute;inset:0;"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Cosmic</h3>
+      <p>Violet + indigo + electric blue. Deep space palette — mysterious and focused.</p>
+    </div>
+  </div>
+
+  <!-- C: Sunset Aurora -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="card-preview" style="background:#080003;">
+      <div class="aurora-band" style="width:320px;height:160px;background:radial-gradient(ellipse,#cc1177 0%,transparent 70%);top:-25px;left:-25px;opacity:0.35;--dx:22px;--dy:16px;--ds:1.1;animation-duration:8s;"></div>
+      <div class="aurora-band" style="width:260px;height:140px;background:radial-gradient(ellipse,#7722cc 0%,transparent 70%);top:35px;right:-20px;opacity:0.28;--dx:-16px;--dy:14px;--ds:1.12;animation-duration:10.5s;"></div>
+      <div class="aurora-band" style="width:230px;height:110px;background:radial-gradient(ellipse,#ff8800 0%,transparent 70%);bottom:-5px;left:30px;opacity:0.22;--dx:8px;--dy:-10px;--ds:0.93;animation-duration:9s;"></div>
+      <canvas id="canvas-c" style="position:absolute;inset:0;"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Sunset Aurora</h3>
+      <p>Magenta + violet + amber. Warm and unique — energizing but still dreamy.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function initStars(canvasId, colorSet) {
+  const canvas = document.getElementById(canvasId);
+  const preview = canvas.parentElement;
+  canvas.width = preview.offsetWidth;
+  canvas.height = preview.offsetHeight;
+  const ctx = canvas.getContext('2d');
+  const stars = Array.from({length: 90}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.2 + 0.2,
+    op: Math.random() * 0.6 + 0.2,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.7 + 0.3,
+    color: colorSet[Math.floor(Math.random() * colorSet.length)]
+  }));
+  function draw(ts) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = ts / 1000;
+    for (const s of stars) {
+      const twinkle = 0.25 + 0.75 * (Math.sin(t * s.speed + s.phase) * 0.5 + 0.5);
+      ctx.globalAlpha = s.op * twinkle;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+initStars('canvas-a', ['#fff', '#c0ffee', '#a0e8ff']);
+initStars('canvas-b', ['#fff', '#c0c8ff', '#a0b0ff']);
+initStars('canvas-c', ['#fff', '#ffd0e8', '#ffd0a0']);
+</script>

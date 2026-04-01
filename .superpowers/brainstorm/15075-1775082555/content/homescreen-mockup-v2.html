@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Zentime — Cosmic Aurora Mockup</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; background: #0e0e12; display: flex; align-items: center; justify-content: center; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; }
+
+  .frame {
+    width: 390px;
+    height: 844px;
+    border-radius: 52px;
+    border: 2px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.04) inset;
+    background: #000;
+  }
+
+  canvas#bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 390px;
+    height: 844px;
+  }
+
+  .ui {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 22px;
+  }
+
+  .statusbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px 6px 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.65);
+  }
+
+  .card {
+    background: rgba(255,255,255,0.055);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  .label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.38);
+    margin-bottom: 6px;
+  }
+
+  .streak-num {
+    font-size: 40px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .streak-num span {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.38);
+    margin-left: 4px;
+  }
+
+  .streak-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.42);
+    margin-top: 4px;
+  }
+
+  .dots {
+    display: flex;
+    gap: 7px;
+    margin-top: 14px;
+  }
+
+  .dot {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.38);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .dot.done {
+    background: rgba(90,100,255,0.28);
+    border: 1px solid rgba(120,140,255,0.35);
+    color: rgba(255,255,255,0.85);
+  }
+
+  .start-btn {
+    background: #ffffff;
+    color: #000;
+    border-radius: 16px;
+    padding: 21px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 18px;
+    letter-spacing: -0.2px;
+  }
+
+  .modes {
+    display: flex;
+    gap: 9px;
+    margin-top: 14px;
+  }
+
+  .mode {
+    flex: 1;
+    background: rgba(255,255,255,0.055);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 12px 6px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.42);
+    font-weight: 500;
+  }
+
+  .mode.active {
+    background: rgba(80,100,255,0.18);
+    border-color: rgba(120,140,255,0.32);
+    color: rgba(255,255,255,0.88);
+  }
+
+  .mode-icon { font-size: 17px; margin-bottom: 4px; }
+
+  .next {
+    text-align: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  .home-bar {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 5px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 3px;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <canvas id="bg" width="390" height="844"></canvas>
+
+  <div class="ui">
+    <div class="statusbar"><span>9:41</span><span>●●●</span></div>
+
+    <div class="card">
+      <div class="label">Current Streak</div>
+      <div class="streak-num">3<span>days</span></div>
+      <div class="streak-sub">You've reached your weekly goal!</div>
+      <div class="dots">
+        <div class="dot">M</div>
+        <div class="dot">T</div>
+        <div class="dot done">W</div>
+        <div class="dot done">T</div>
+        <div class="dot done">F</div>
+        <div class="dot">S</div>
+        <div class="dot">S</div>
+      </div>
+    </div>
+
+    <div class="start-btn">Start Focus</div>
+
+    <div class="modes">
+      <div class="mode active"><div class="mode-icon">🎯</div>Focus</div>
+      <div class="mode"><div class="mode-icon">☕</div>Short Break</div>
+      <div class="mode"><div class="mode-icon">🌿</div>Long Break</div>
+    </div>
+
+    <div class="next">Next Session 10:00 AM</div>
+  </div>
+
+  <div class="home-bar"></div>
+</div>
+
+<script>
+(function() {
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  const W = 390, H = 844;
+
+  // --- Stars ---
+  const stars = [];
+  for (let i = 0; i < 180; i++) {
+    stars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.2 + 0.15,
+      baseOp: Math.random() * 0.5 + 0.15,
+      phase: Math.random() * Math.PI * 2,
+      freq: Math.random() * 0.6 + 0.25
+    });
+  }
+
+  // --- Aurora bands ---
+  // Each band: normalized center, radii, color, drift, timing
+  const bands = [
+    { nx: 0.55, ny: 0.15, rx: 310, ry: 115, r: 70,  g: 30,  b: 255, op: 0.26, px: 0.0,  py: 1.1,  period: 12, driftX: 30, driftY: 20 },
+    { nx: 0.28, ny: 0.26, rx: 250, ry: 95,  r: 100, g: 0,   b: 210, op: 0.20, px: 2.0,  py: 0.4,  period: 15, driftX: 22, driftY: 24 },
+    { nx: 0.70, ny: 0.40, rx: 200, ry: 85,  r: 0,   g: 50,  b: 255, op: 0.17, px: 4.2,  py: 3.0,  period: 10, driftX: 24, driftY: 18 },
+    { nx: 0.42, ny: 0.10, rx: 270, ry: 75,  r: 50,  g: 10,  b: 190, op: 0.15, px: 1.4,  py: 2.7,  period: 17, driftX: 18, driftY: 15 },
+    { nx: 0.62, ny: 0.52, rx: 175, ry: 70,  r: 30,  g: 70,  b: 255, op: 0.13, px: 3.6,  py: 0.8,  period: 13, driftX: 16, driftY: 22 },
+    { nx: 0.20, ny: 0.45, rx: 190, ry: 80,  r: 130, g: 20,  b: 230, op: 0.12, px: 5.1,  py: 1.9,  period: 9,  driftX: 20, driftY: 16 },
+  ];
+
+  function drawFrame(ts) {
+    const t = ts * 0.001;
+    ctx.clearRect(0, 0, W, H);
+
+    // Background
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0,   '#020010');
+    bgGrad.addColorStop(0.4, '#010009');
+    bgGrad.addColorStop(1,   '#000005');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // Aurora bands
+    ctx.globalCompositeOperation = 'screen';
+    for (const b of bands) {
+      const dx = Math.sin(t * (Math.PI * 2) / b.period + b.px) * b.driftX;
+      const dy = Math.cos(t * (Math.PI * 2) / b.period + b.py) * b.driftY;
+      const cx = b.nx * W + dx;
+      const cy = b.ny * H + dy;
+      const pulse = 0.7 + 0.3 * Math.sin(t * 0.45 + b.px);
+      const baseAlpha = b.op * pulse;
+
+      // 4 nested ellipses for smooth falloff
+      for (let layer = 4; layer >= 1; layer--) {
+        const scale = 1 + layer * 0.18;
+        const rx = b.rx * scale;
+        const ry = b.ry * scale;
+        const alpha = baseAlpha * (layer / 4) * 0.65;
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.scale(1, ry / rx);
+
+        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, rx);
+        g.addColorStop(0,   `rgba(${b.r},${b.g},${b.b},${alpha})`);
+        g.addColorStop(0.45,`rgba(${b.r},${b.g},${b.b},${alpha * 0.35})`);
+        g.addColorStop(1,   `rgba(${b.r},${b.g},${b.b},0)`);
+
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(0, 0, rx, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    // Horizontal shimmer streaks
+    const shimmerDefs = [
+      { y: 120, x: 30,  w: 200, phase: 0.0,  period: 7  },
+      { y: 230, x: 100, w: 150, phase: 1.3,  period: 9  },
+      { y: 340, x: 50,  w: 180, phase: 2.6,  period: 11 },
+      { y: 470, x: 80,  w: 220, phase: 0.9,  period: 8  },
+    ];
+    for (const s of shimmerDefs) {
+      const shimmer = 0.4 + 0.6 * ((Math.sin(t * Math.PI * 2 / s.period + s.phase) + 1) / 2);
+      ctx.globalAlpha = 0.055 * shimmer;
+      const sg = ctx.createLinearGradient(s.x, 0, s.x + s.w, 0);
+      sg.addColorStop(0,   'rgba(120,140,255,0)');
+      sg.addColorStop(0.5, 'rgba(160,180,255,1)');
+      sg.addColorStop(1,   'rgba(120,140,255,0)');
+      ctx.fillStyle = sg;
+      ctx.fillRect(s.x, s.y - 1, s.w, 2);
+    }
+
+    // Stars
+    ctx.globalCompositeOperation = 'source-over';
+    for (const s of stars) {
+      const tw = 0.2 + 0.8 * ((Math.sin(t * s.freq + s.phase) + 1) / 2);
+      const op = s.baseOp * tw;
+      ctx.globalAlpha = op;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+      if (s.r > 1.0 && op > 0.38) {
+        ctx.globalAlpha = op * 0.22;
+        ctx.strokeStyle = '#c8d0ff';
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(s.x - s.r * 3.5, s.y); ctx.lineTo(s.x + s.r * 3.5, s.y);
+        ctx.moveTo(s.x, s.y - s.r * 3.5); ctx.lineTo(s.x, s.y + s.r * 3.5);
+        ctx.stroke();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    requestAnimationFrame(drawFrame);
+  }
+
+  requestAnimationFrame(drawFrame);
+})();
+</script>
+</body>
+</html>

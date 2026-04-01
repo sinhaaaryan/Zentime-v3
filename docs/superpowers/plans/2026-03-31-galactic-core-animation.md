@@ -1,3 +1,38 @@
+# Galactic Core Space Animation Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Goal:** Replace the current `SpaceBackgroundLayer` with a premium "Galactic Core" animation featuring a procedurally-rendered spiral galaxy with warm golden core, cool blue arms, colored-tint twinkle stars, swirling dust, and shooting comets — applied to both `HomeView` and `ActiveTimerView`.
+
+**Architecture:** A single drop-in SwiftUI `View` called `GalacticBackgroundLayer` replaces `SpaceBackgroundLayer`. It renders entirely inside a `TimelineView` + `Canvas` for GPU-efficient frame drawing. A separate `GalacticTimerBackground` wraps it for the `ActiveTimerView` with a slightly more intense effect (faster rotation, brighter core) signalled via a `Bool` parameter.
+
+**Tech Stack:** SwiftUI `Canvas`, `TimelineView(.animation)`, `GraphicsContext`, `Path`, `withAnimation`, pure Swift math (sin/cos/atan2) — no external dependencies.
+
+---
+
+## File Map
+
+| File | Action | Responsibility |
+|------|--------|----------------|
+| `Zentime/Views/Prototypes/AnimationLayers/GalacticBackgroundLayer.swift` | **Create** | Full galaxy rendering: core glow, spiral arm dust, starfield with color tints, shooting comets |
+| `Zentime/Views/HomeView.swift` | **Modify** | Swap `SpaceBackgroundLayer()` → `GalacticBackgroundLayer()` |
+| `Zentime/Views/ActiveTimerView.swift` | **Modify** | Add `GalacticBackgroundLayer(isActive: true)` behind the existing `ThemedBackground` when theme is `.classic` (the space theme used on that screen) |
+| `Zentime/Views/Prototypes/AnimationLayers/SpaceBackgroundLayer.swift` | **Keep** | Not deleted — still used as reference; just replaced in HomeView |
+
+---
+
+### Task 1: Create `GalacticBackgroundLayer` — Core Glow + Starfield
+
+**Files:**
+- Create: `Zentime/Views/Prototypes/AnimationLayers/GalacticBackgroundLayer.swift`
+
+This task builds the foundational struct and the two simplest render passes: the warm/cool galactic core bloom and the star field with color-tinted twinkle.
+
+- [ ] **Step 1: Create the file with data models and star generation**
+
+Create `Zentime/Views/Prototypes/AnimationLayers/GalacticBackgroundLayer.swift` with the following content:
+
+```swift
 import SwiftUI
 
 // MARK: - Data Models
@@ -32,7 +67,6 @@ struct GalacticBackgroundLayer: View {
     @State private var comets: [Comet] = []
     @State private var nebulaOffset1: CGSize = .zero
     @State private var nebulaOffset2: CGSize = .zero
-    @State private var cometTimer: Timer?
 
     // Dust cloud colours (warm arm / cool arm)
     private let armColorWarm = Color(red: 1.00, green: 0.90, blue: 0.55)  // golden
@@ -93,10 +127,6 @@ struct GalacticBackgroundLayer: View {
                 animateNebula()
                 scheduleCometSpawner()
             }
-            .onDisappear {
-                cometTimer?.invalidate()
-                cometTimer = nil
-            }
         }
     }
 
@@ -111,7 +141,7 @@ struct GalacticBackgroundLayer: View {
                 radius: CGFloat.random(in: 0.4...2.0),
                 baseOpacity: Double.random(in: 0.25...0.85),
                 phase: Double.random(in: 0...(2 * .pi)),
-                colorIndex: [0, 0, 0, 1, 2].randomElement() ?? 0  // mostly white
+                colorIndex: [0, 0, 0, 1, 2].randomElement()!  // mostly white
             )
         }
     }
@@ -131,7 +161,7 @@ struct GalacticBackgroundLayer: View {
 
     private func scheduleCometSpawner() {
         let interval: Double = isActive ? 2.5 : 4.0
-        cometTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
+        Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { _ in
             spawnComet()
         }
         // Spawn one immediately after a short delay so it doesn't start empty
@@ -167,6 +197,7 @@ struct GalacticBackgroundLayer: View {
             let a = Double(6 - i) / 5.0 * 0.035 * Double(intensity)
             context.opacity = a
             let rect = CGRect(x: cx - r, y: cy - r * 0.55, width: r * 2, height: r * 1.10)
+            // Use a radial blend: cool outer, warm inner
             let blueish = Color(red: 0.65, green: 0.80, blue: 1.00)
             context.fill(Path(ellipseIn: rect), with: .color(blueish))
         }
@@ -201,6 +232,8 @@ struct GalacticBackgroundLayer: View {
             let armOffset = Double(armIndex) * .pi
             let armIsWarm = armIndex == 0
 
+            // Each arm is a series of dust blobs along a logarithmic spiral
+            // r = a * e^(b*θ)  — we approximate with linear spacing + exponential scale
             let blobCount = 22
             for i in 0..<blobCount {
                 let t = Double(i) / Double(blobCount - 1)  // 0–1 along arm
@@ -274,16 +307,210 @@ struct GalacticBackgroundLayer: View {
             let tx = hx - comet.tailLength * ac * size.width
             let ty = hy - comet.tailLength * as_ * size.height
 
+            // Gradient tail: transparent → white head
             context.opacity = alpha
             var tailPath = Path()
             tailPath.move(to: CGPoint(x: tx, y: ty))
             tailPath.addLine(to: CGPoint(x: hx, y: hy))
             context.stroke(tailPath, with: .color(.white), lineWidth: 1.0)
 
-            // Bright head
+            // Bright head dot
             context.opacity = alpha * 1.4
             let hr: CGFloat = 1.5
             context.fill(Path(ellipseIn: CGRect(x: hx - hr, y: hy - hr, width: hr * 2, height: hr * 2)), with: .color(.white))
         }
     }
 }
+```
+
+- [ ] **Step 2: Verify the file was created**
+
+Run: `ls Zentime/Views/Prototypes/AnimationLayers/GalacticBackgroundLayer.swift`
+Expected: file path printed with no error.
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add Zentime/Views/Prototypes/AnimationLayers/GalacticBackgroundLayer.swift
+git commit -m "feat: add GalacticBackgroundLayer with spiral arms, core glow, tinted stars, comets"
+```
+
+---
+
+### Task 2: Wire `GalacticBackgroundLayer` into `HomeView`
+
+**Files:**
+- Modify: `Zentime/Views/HomeView.swift`
+
+- [ ] **Step 1: Open `HomeView.swift` and find the background stack**
+
+In `HomeView.swift`, lines 18–21 currently read:
+```swift
+// Space background
+Color.black.ignoresSafeArea()
+SpaceBackgroundLayer()
+    .ignoresSafeArea()
+```
+
+- [ ] **Step 2: Replace `SpaceBackgroundLayer` with `GalacticBackgroundLayer`**
+
+Change those lines to:
+```swift
+// Galactic background
+Color.black.ignoresSafeArea()
+GalacticBackgroundLayer()
+    .ignoresSafeArea()
+```
+
+- [ ] **Step 3: Build and check for compiler errors**
+
+Run:
+```bash
+xcodebuild -scheme Zentime -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | grep -E "error:|warning:|BUILD"
+```
+Expected: `BUILD SUCCEEDED` with no `error:` lines.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add Zentime/Views/HomeView.swift
+git commit -m "feat: use GalacticBackgroundLayer on HomeView"
+```
+
+---
+
+### Task 3: Wire `GalacticBackgroundLayer` into `ActiveTimerView`
+
+**Files:**
+- Modify: `Zentime/Views/ActiveTimerView.swift`
+
+`ActiveTimerView` already uses `ThemedBackground(theme: theme)` as its `.background`. The classic theme has a plain black background with no animated layer. We add `GalacticBackgroundLayer(isActive: true)` for the classic theme only (the space theme), layered beneath `ThemedBackground`.
+
+- [ ] **Step 1: Open `ActiveTimerView.swift` and locate the background modifier**
+
+Line 181 currently reads:
+```swift
+.background(ThemedBackground(theme: theme))
+```
+
+- [ ] **Step 2: Replace single background with a ZStack background**
+
+Change that line to:
+```swift
+.background {
+    ZStack {
+        if theme == .classic {
+            Color.black.ignoresSafeArea()
+            GalacticBackgroundLayer(isActive: true)
+                .ignoresSafeArea()
+        } else {
+            ThemedBackground(theme: theme)
+        }
+    }
+}
+```
+
+- [ ] **Step 3: Build and check for compiler errors**
+
+Run:
+```bash
+xcodebuild -scheme Zentime -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | grep -E "error:|warning:|BUILD"
+```
+Expected: `BUILD SUCCEEDED` with no `error:` lines.
+
+- [ ] **Step 4: Commit**
+
+```bash
+git add Zentime/Views/ActiveTimerView.swift
+git commit -m "feat: galactic core animation on ActiveTimerView (classic theme)"
+```
+
+---
+
+### Task 4: Register `GalacticBackgroundLayer.swift` in Xcode project
+
+**Files:**
+- Modify: `Zentime.xcodeproj/project.pbxproj`
+
+New Swift files added to the filesystem are not automatically picked up by Xcode — they need to be added to the `.pbxproj`. The easiest way is to run `xcodebuild` which reports if the file is missing, or add it via the project file directly.
+
+- [ ] **Step 1: Check if xcodebuild already sees the file**
+
+Run:
+```bash
+xcodebuild -scheme Zentime -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | grep -E "GalacticBackgroundLayer|error:|BUILD"
+```
+
+If output contains `BUILD SUCCEEDED` → the file was already picked up (Xcode sometimes picks up files in the same directory group automatically). **Skip to Step 4.**
+
+If output contains `cannot find type 'GalacticBackgroundLayer'` → proceed to Step 2.
+
+- [ ] **Step 2: Add the file via `xcodebuild` file reference**
+
+The safest way without opening Xcode is to use `ruby` with `xcodeproj` gem or manually add the reference. Check if the xcodeproj gem is available:
+
+```bash
+gem list xcodeproj 2>/dev/null | head -1
+```
+
+If installed, run:
+```bash
+ruby -e "
+require 'xcodeproj'
+proj = Xcodeproj::Project.open('Zentime.xcodeproj')
+target = proj.targets.find { |t| t.name == 'Zentime' }
+group = proj.main_group.find_subpath('Zentime/Views/Prototypes/AnimationLayers', false)
+file_ref = group.new_reference('GalacticBackgroundLayer.swift')
+target.source_build_phase.add_file_reference(file_ref)
+proj.save
+"
+```
+
+- [ ] **Step 3: If xcodeproj gem is not available, open Xcode and add the file manually**
+
+In Xcode: right-click `Zentime/Views/Prototypes/AnimationLayers` group → "Add Files to Zentime" → select `GalacticBackgroundLayer.swift` → ensure "Add to target: Zentime" is checked → Add.
+
+- [ ] **Step 4: Build again to confirm**
+
+Run:
+```bash
+xcodebuild -scheme Zentime -destination 'platform=iOS Simulator,name=iPhone 16' build 2>&1 | grep -E "error:|BUILD"
+```
+Expected: `BUILD SUCCEEDED` with no `error:` lines.
+
+- [ ] **Step 5: Commit pbxproj if it changed**
+
+```bash
+git add Zentime.xcodeproj/project.pbxproj
+git commit -m "chore: register GalacticBackgroundLayer.swift in Xcode project"
+```
+
+---
+
+### Task 5: Final visual verification
+
+- [ ] **Step 1: Boot the simulator**
+
+```bash
+xcrun simctl boot "iPhone 16" 2>/dev/null || true
+open -a Simulator
+```
+
+- [ ] **Step 2: Install and launch**
+
+```bash
+xcodebuild -scheme Zentime -destination 'platform=iOS Simulator,name=iPhone 16' -derivedDataPath /tmp/zentime-dd install 2>&1 | tail -5
+xcrun simctl launch booted $(xcodebuild -scheme Zentime -showBuildSettings 2>/dev/null | grep PRODUCT_BUNDLE_IDENTIFIER | head -1 | awk '{print $3}')
+```
+
+- [ ] **Step 3: Confirm visuals**
+
+On the **HomeView**: golden core bloom visible near top-third, spiral dust arms rotating slowly, tinted stars twinkle, comets streak diagonally every few seconds.
+
+On the **ActiveTimerView** (launch a focus session): same galaxy, slightly brighter/faster, visible behind the progress ring.
+
+- [ ] **Step 4: Final commit**
+
+```bash
+git commit --allow-empty -m "feat: galactic core animation complete on HomeView and ActiveTimerView"
+```
