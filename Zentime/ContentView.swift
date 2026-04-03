@@ -71,4 +71,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .modelContainer(for: [ScheduledSession.self, CompletedSession.self], inMemory: true)
 }

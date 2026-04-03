@@ -187,10 +187,14 @@ struct DaySessionsSheet: View {
     let date: Date
     let sessions: [CompletedSession]
 
+    private static let dateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateStyle = .long
+        return f
+    }()
+
     private var dateString: String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        return formatter.string(from: date)
+        return Self.dateFormatter.string(from: date)
     }
 
     var body: some View {

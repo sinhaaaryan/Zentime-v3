@@ -171,11 +171,11 @@ struct AddSessionSheet: View {
                         mode: selectedMode.title,
                         scheduledDate: finalDate
                     )
+                    HapticManager.notification(.success)
+                    dismiss()
                 } else {
                     showPermissionAlert = true
                 }
-                HapticManager.notification(.success)
-                dismiss()
             }
         }
     }
