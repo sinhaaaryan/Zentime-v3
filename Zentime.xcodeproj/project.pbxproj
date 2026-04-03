@@ -36,6 +36,7 @@
 		A10017 /* brain_reset_852hz_5m.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B10017 /* brain_reset_852hz_5m.mp3 */; };
 		A10018 /* NowPlayingBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10018 /* NowPlayingBar.swift */; };
 		A10019 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10019 /* HapticManager.swift */; };
+		A10022 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10022 /* NotificationService.swift */; };
 		A8DEF172062C4B089CC03E1A /* ThemeSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */; };
 		F57C7FCA71CF43948437E221 /* PetalLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116EB593D740409B844B37B0 /* PetalLayer.swift */; };
 		F906BB87B34150F00834245C /* AuroraBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E187BAACF204E9C17D905 /* AuroraBackgroundView.swift */; };
@@ -75,6 +76,7 @@
 		B10017 /* brain_reset_852hz_5m.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = brain_reset_852hz_5m.mp3; sourceTree = "<group>"; };
 		B10018 /* NowPlayingBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingBar.swift; sourceTree = "<group>"; };
 		B10019 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		B10022 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		B1AECB21D27549ABB5E35A8A /* ThemeSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeSwitcher.swift; sourceTree = "<group>"; };
 		BF8E187BAACF204E9C17D905 /* AuroraBackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AuroraBackgroundView.swift; sourceTree = "<group>"; };
 		C53282E128F94831B022578F /* StarfieldLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarfieldLayer.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 			children = (
 				B10014 /* AudioManager.swift */,
 				B10019 /* HapticManager.swift */,
+				B10022 /* NotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				A10015 /* ZentimeTheme.swift in Sources */,
 				A10018 /* NowPlayingBar.swift in Sources */,
 				A10019 /* HapticManager.swift in Sources */,
+				A10022 /* NotificationService.swift in Sources */,
 				FBD7073940CB430EB15B8797 /* PrototypeTheme.swift in Sources */,
 				4C93FBB270B24FC7AD2F3BBC /* ThemeManager.swift in Sources */,
 				10CD1806B98A4C2BA78FE8E0 /* StarfieldLayer.swift in Sources */,
