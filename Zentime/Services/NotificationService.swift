@@ -26,8 +26,8 @@ final class NotificationService {
 
     // MARK: - Evening Reminder
 
-    /// Schedules the daily evening reminder if not already scheduled.
-    /// Safe to call multiple times — checks pending requests first.
+    /// Schedules the daily evening reminder. Safe to call multiple times —
+    /// UNUserNotificationCenter silently replaces any existing request with the same identifier.
     func scheduleEveningReminderIfNeeded() {
         let (hour, minute) = savedEveningReminderTime()
         scheduleEveningReminder(hour: hour, minute: minute)
