@@ -14,8 +14,16 @@ struct TonightsPlanView: View {
         let calendar = Calendar.current
         let now = Date()
         guard let endOfDay = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: now) else { return [] }
+        // Lower bound is `now` (not startOfDay) — intentionally hides past-time sessions
+        // so the list only shows upcoming sessions for the rest of tonight.
         return allScheduled.filter { $0.scheduledDate >= now && $0.scheduledDate <= endOfDay }
     }
+
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f
+    }()
 
     private var reminderTimeLabel: String {
         let (hour, minute) = notificationService.savedEveningReminderTime()
@@ -23,9 +31,7 @@ struct TonightsPlanView: View {
         components.hour = hour
         components.minute = minute
         let date = Calendar.current.date(from: components) ?? Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter.string(from: date)
+        return Self.timeFormatter.string(from: date)
     }
 
     var body: some View {
@@ -134,17 +140,19 @@ struct ScheduledSessionRow: View {
 
     private var mode: AppMode? { AppMode(rawValue: session.mode) }
 
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f
+    }()
+
     private var reminderTimeLabel: String {
         let reminderDate = session.scheduledDate.addingTimeInterval(-5 * 60)
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter.string(from: reminderDate)
+        return Self.timeFormatter.string(from: reminderDate)
     }
 
     private var scheduledTimeLabel: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "h:mm a"
-        return formatter.string(from: session.scheduledDate)
+        return Self.timeFormatter.string(from: session.scheduledDate)
     }
 
     var body: some View {

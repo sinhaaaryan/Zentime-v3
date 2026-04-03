@@ -5,17 +5,7 @@ struct EveningReminderSettingsSheet: View {
     @Environment(NotificationService.self) private var notificationService
     @Environment(\.dismiss) private var dismiss
 
-    @State private var reminderDate: Date
-
-    init() {
-        let service = NotificationService.shared
-        let (hour, minute) = service.savedEveningReminderTime()
-        var components = DateComponents()
-        components.hour = hour
-        components.minute = minute
-        let date = Calendar.current.date(from: components) ?? Date()
-        _reminderDate = State(initialValue: date)
-    }
+    @State private var reminderDate: Date = Date()
 
     var body: some View {
         VStack(spacing: 24) {
@@ -56,5 +46,12 @@ struct EveningReminderSettingsSheet: View {
         }
         .padding(.horizontal, ZentimeTheme.spacing)
         .background(Color.black.ignoresSafeArea())
+        .onAppear {
+            let (hour, minute) = notificationService.savedEveningReminderTime()
+            var components = DateComponents()
+            components.hour = hour
+            components.minute = minute
+            reminderDate = Calendar.current.date(from: components) ?? Date()
+        }
     }
 }

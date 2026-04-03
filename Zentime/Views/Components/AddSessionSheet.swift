@@ -160,6 +160,8 @@ struct AddSessionSheet: View {
                 mode: selectedMode.title,
                 scheduledDate: finalDate
             )
+            HapticManager.notification(.success)
+            dismiss()
         } else {
             Task {
                 await notificationService.requestPermission()
@@ -172,11 +174,10 @@ struct AddSessionSheet: View {
                 } else {
                     showPermissionAlert = true
                 }
+                HapticManager.notification(.success)
+                dismiss()
             }
         }
-
-        HapticManager.notification(.success)
-        dismiss()
     }
 }
 

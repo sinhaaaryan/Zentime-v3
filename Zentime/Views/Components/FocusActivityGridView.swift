@@ -79,7 +79,8 @@ struct FocusActivityGridView: View {
                     .font(.system(size: 10))
                     .foregroundStyle(ZentimeTheme.secondaryText)
                 Spacer()
-                Text("Today: \(sessionCount(for: Date())) session\(sessionCount(for: Date()) == 1 ? "" : "s")")
+                let todayCount = sessionCount(for: Date())
+                Text("Today: \(todayCount) session\(todayCount == 1 ? "" : "s")")
                     .font(.system(size: 10))
                     .foregroundStyle(ZentimeTheme.secondaryText)
             }
@@ -120,7 +121,7 @@ struct FocusActivityGridView: View {
         switch range {
         case .week: return 7
         case .month: return 7
-        case .year: return 13
+        case .year: return 13 // 13 columns × 28 rows = 364 days (simplified year view for mobile)
         }
     }
 
