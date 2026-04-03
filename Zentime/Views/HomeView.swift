@@ -7,10 +7,6 @@ struct HomeView: View {
     @State private var buttonScale: CGFloat = 1.0
     @Environment(ThemeManager.self) private var themeManager
 
-    // Mock streak data — replace with real persistence later
-    private let streakDays = 3
-    private let completedDays = [false, false, true, true, true, false, false]
-
     var body: some View {
         ZStack {
             // Aurora background
@@ -21,13 +17,6 @@ struct HomeView: View {
                 ScrollView {
                     VStack(spacing: 32) {
                         Spacer().frame(height: 50)
-
-                        // Streak Card
-                        StreakCard(
-                            streakDays: streakDays,
-                            weeklyGoal: 7,
-                            completedDays: completedDays
-                        )
 
                         // Start Focus Button
                         Button {
