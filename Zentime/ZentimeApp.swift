@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct ZentimeApp: App {
@@ -6,5 +7,6 @@ struct ZentimeApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [ScheduledSession.self, CompletedSession.self])
     }
 }

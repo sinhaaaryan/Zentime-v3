@@ -20,6 +20,8 @@
 		A10003 /* AppMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10003 /* AppMode.swift */; };
 		A10004 /* TimerConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10004 /* TimerConfig.swift */; };
 		A10005 /* TimerPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10005 /* TimerPhase.swift */; };
+		A10020 /* ScheduledSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10020 /* ScheduledSession.swift */; };
+		A10021 /* CompletedSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10021 /* CompletedSession.swift */; };
 		A10006 /* TimerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10006 /* TimerViewModel.swift */; };
 		A10007 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10007 /* HomeView.swift */; };
 		A10008 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B10008 /* SetupView.swift */; };
@@ -57,6 +59,8 @@
 		B10003 /* AppMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMode.swift; sourceTree = "<group>"; };
 		B10004 /* TimerConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerConfig.swift; sourceTree = "<group>"; };
 		B10005 /* TimerPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerPhase.swift; sourceTree = "<group>"; };
+		B10020 /* ScheduledSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledSession.swift; sourceTree = "<group>"; };
+		B10021 /* CompletedSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletedSession.swift; sourceTree = "<group>"; };
 		B10006 /* TimerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewModel.swift; sourceTree = "<group>"; };
 		B10007 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		B10008 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 				B10003 /* AppMode.swift */,
 				B10004 /* TimerConfig.swift */,
 				B10005 /* TimerPhase.swift */,
+				B10020 /* ScheduledSession.swift */,
+				B10021 /* CompletedSession.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -341,6 +347,8 @@
 				FA000013 /* ModeSelector.swift in Sources */,
 				652901C31442124FA8C86FE3 /* AuroraShader.metal in Sources */,
 				F906BB87B34150F00834245C /* AuroraBackgroundView.swift in Sources */,
+				A10020 /* ScheduledSession.swift in Sources */,
+				A10021 /* CompletedSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
