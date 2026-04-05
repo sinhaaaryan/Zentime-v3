@@ -1,0 +1,142 @@
+<h2>Space Background Direction</h2>
+<p class="subtitle">Which of these three visual styles feels right for Zentime's home screen?</p>
+
+<style>
+.cards { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 24px; }
+.card { flex: 1; min-width: 260px; cursor: pointer; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255,255,255,0.08); transition: border-color 0.2s, transform 0.2s; background: #0a0a0f; }
+.card:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+.card.selected { border-color: #7b8cde !important; }
+.card-preview { width: 100%; height: 220px; position: relative; overflow: hidden; }
+.card-body { padding: 16px 18px; }
+.card-body h3 { margin: 0 0 6px; font-size: 16px; color: #fff; }
+.card-body p { margin: 0; font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+
+/* ---- Style A: Deep Field Star Field ---- */
+#preview-a {
+  background: #000005;
+}
+#preview-a canvas { position: absolute; inset: 0; }
+
+/* ---- Style B: Aurora / Atmospheric ---- */
+#preview-b {
+  background: #000510;
+  overflow: hidden;
+}
+.aurora-layer {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  animation: drift linear infinite alternate;
+  mix-blend-mode: screen;
+}
+@keyframes drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(var(--dx), var(--dy)) scale(var(--ds)); }
+}
+
+/* ---- Style C: Deep Space Nebula ---- */
+#preview-c {
+  background: radial-gradient(ellipse at 30% 40%, #0d0528 0%, #000008 60%, #000000 100%);
+  overflow: hidden;
+}
+.nebula-blob {
+  position: absolute;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  filter: blur(var(--blur));
+  opacity: var(--op);
+  animation: pulse ease-in-out infinite alternate;
+}
+@keyframes pulse {
+  from { transform: scale(1) translate(0,0); opacity: var(--op); }
+  to { transform: scale(var(--ps)) translate(var(--tx), var(--ty)); opacity: calc(var(--op) * 1.3); }
+}
+</style>
+
+<div class="cards">
+
+  <!-- A: Deep Field Star Field -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="card-preview" id="preview-a">
+      <canvas id="canvas-a"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Deep Field</h3>
+      <p>Thousands of layered stars at varying depths — subtle parallax, slow drift. Clean and minimal. Think Hubble deep field.</p>
+    </div>
+  </div>
+
+  <!-- B: Aurora -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="card-preview" id="preview-b">
+      <div class="aurora-layer" style="width:350px;height:180px;background:radial-gradient(ellipse,#00e5b0 0%,transparent 70%);top:-20px;left:-40px;--dx:30px;--dy:20px;--ds:1.1;animation-duration:8s;opacity:0.18;"></div>
+      <div class="aurora-layer" style="width:280px;height:140px;background:radial-gradient(ellipse,#4060ff 0%,transparent 70%);top:40px;right:-30px;--dx:-20px;--dy:15px;--ds:1.15;animation-duration:11s;opacity:0.22;"></div>
+      <div class="aurora-layer" style="width:320px;height:120px;background:radial-gradient(ellipse,#a020f0 0%,transparent 70%);bottom:0;left:20px;--dx:15px;--dy:-10px;--ds:0.9;animation-duration:9s;opacity:0.16;"></div>
+      <canvas id="canvas-b" style="position:absolute;inset:0;"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Aurora</h3>
+      <p>Slow-moving teal, violet, and electric blue light bands across a dark sky. Dreamy and calm — like the northern lights from orbit.</p>
+    </div>
+  </div>
+
+  <!-- C: Nebula / Gas Cloud -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="card-preview" id="preview-c">
+      <div class="nebula-blob" style="width:300px;height:180px;background:radial-gradient(ellipse,#8b1a6b 0%,transparent 70%);top:-30px;left:-20px;--blur:45px;--op:0.28;--ps:1.08;--tx:10px;--ty:8px;animation-duration:7s;"></div>
+      <div class="nebula-blob" style="width:240px;height:160px;background:radial-gradient(ellipse,#1a3a8b 0%,transparent 70%);top:30px;right:-20px;--blur:40px;--op:0.22;--ps:1.12;--tx:-8px;--ty:12px;animation-duration:10s;"></div>
+      <div class="nebula-blob" style="width:200px;height:200px;background:radial-gradient(ellipse,#2d1a8b 0%,transparent 60%);bottom:-40px;left:30px;--blur:50px;--op:0.20;--ps:0.95;--tx:5px;--ty:-10px;animation-duration:12s;"></div>
+      <canvas id="canvas-c" style="position:absolute;inset:0;"></canvas>
+    </div>
+    <div class="card-body">
+      <h3>Nebula Cloud</h3>
+      <p>Rich magenta, indigo, and deep blue gas clouds slowly breathing. Dense and atmospheric — like looking into the Eagle or Crab nebula.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ---- Shared star renderer for all three canvases ----
+function initStars(canvasId, count, colorMode) {
+  const canvas = document.getElementById(canvasId);
+  const preview = canvas.parentElement;
+  canvas.width = preview.offsetWidth;
+  canvas.height = preview.offsetHeight;
+  const ctx = canvas.getContext('2d');
+  const stars = Array.from({length: count}, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 1.4 + 0.2,
+    op: Math.random() * 0.7 + 0.15,
+    phase: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.8 + 0.4,
+    color: colorMode === 'warm'
+      ? ['#fff','#ffe8b0','#c8e0ff'][Math.floor(Math.random()*3)]
+      : colorMode === 'cool'
+      ? ['#fff','#b0d4ff','#d0b0ff'][Math.floor(Math.random()*3)]
+      : '#fff'
+  }));
+  function draw(ts) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const t = ts / 1000;
+    for (const s of stars) {
+      const twinkle = 0.3 + 0.7 * (Math.sin(t * s.speed + s.phase) * 0.5 + 0.5);
+      ctx.globalAlpha = s.op * twinkle;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+initStars('canvas-a', 180, 'neutral');
+initStars('canvas-b', 100, 'cool');
+initStars('canvas-c', 80, 'warm');
+</script>

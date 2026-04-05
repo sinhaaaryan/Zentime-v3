@@ -21,6 +21,9 @@ final class TimerViewModel {
     private let audioManager = AudioManager()
     private var nowPlayingUpdateCounter = 0
 
+    // Callback set by ContentView to write CompletedSession to SwiftData
+    var onSessionComplete: ((String, Int) -> Void)?  // (mode.rawValue, durationMinutes)
+
     // MARK: - Init
 
     init() {
@@ -235,6 +238,8 @@ final class TimerViewModel {
         phase = .finished
         remainingSeconds = 0
         audioManager.stop()
+        let durationMinutes = config.focusMinutes
+        onSessionComplete?(mode.rawValue, durationMinutes)
     }
 
     private func startAudio() {
