@@ -2,6 +2,12 @@
 
 **A premium focus and wellness timer for iOS.**
 
+<p align="center">
+  <img src="screenshots/Simulator Screenshot - iPhone 17 Pro Max - 2026-04-05 at 17.27.04.png" width="30%" alt="Home Screen" />
+  <img src="screenshots/Simulator Screenshot - iPhone 17 Pro Max - 2026-04-05 at 17.27.13.png" width="30%" alt="Focus Timer" />
+  <img src="screenshots/Simulator Screenshot - iPhone 17 Pro Max - 2026-04-05 at 17.27.20.png" width="30%" alt="Plan Screen" />
+</p>
+
 Zentime is built around one idea: the quality of your attention determines the quality of your work. It gives you structured time blocks, ambient audio, and a streak system that makes showing up every day feel worth it — all wrapped in an aurora-lit interface that makes opening the app feel like a ritual.
 
 ---
