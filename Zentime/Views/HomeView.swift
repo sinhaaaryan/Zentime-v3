@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     var viewModel: TimerViewModel
@@ -6,6 +7,38 @@ struct HomeView: View {
     @State private var selectedMode: AppMode = .focus
     @State private var buttonScale: CGFloat = 1.0
     @Environment(ThemeManager.self) private var themeManager
+    @Query(sort: \CompletedSession.completedAt, order: .reverse) private var completedSessions: [CompletedSession]
+
+    // Current week (Mon–Sun) completion flags derived from real session data
+    private var weeklyCompletedDays: [Bool] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        // Find the Monday of the current week
+        let weekday = calendar.component(.weekday, from: today) // 1=Sun, 2=Mon…
+        let daysFromMonday = (weekday + 5) % 7
+        guard let monday = calendar.date(byAdding: .day, value: -daysFromMonday, to: today) else {
+            return Array(repeating: false, count: 7)
+        }
+        let sessionDates = Set(completedSessions.map { calendar.startOfDay(for: $0.completedAt) })
+        return (0..<7).map { offset in
+            guard let day = calendar.date(byAdding: .day, value: offset, to: monday) else { return false }
+            return sessionDates.contains(day)
+        }
+    }
+
+    // Consecutive-day streak ending today (or yesterday if no session today yet)
+    private var streakDays: Int {
+        let calendar = Calendar.current
+        let sessionDates = Set(completedSessions.map { calendar.startOfDay(for: $0.completedAt) })
+        var streak = 0
+        var day = calendar.startOfDay(for: Date())
+        while sessionDates.contains(day) {
+            streak += 1
+            guard let prev = calendar.date(byAdding: .day, value: -1, to: day) else { break }
+            day = prev
+        }
+        return streak
+    }
 
     var body: some View {
         ZStack {
@@ -17,6 +50,13 @@ struct HomeView: View {
                 ScrollView {
                     VStack(spacing: 32) {
                         Spacer().frame(height: 50)
+
+                        // Streak Card
+                        StreakCard(
+                            streakDays: streakDays,
+                            weeklyGoal: 7,
+                            completedDays: weeklyCompletedDays
+                        )
 
                         // Start Focus Button
                         Button {
@@ -101,6 +141,7 @@ struct HomeView: View {
     HomeView(viewModel: TimerViewModel(), navigationPath: $path)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .modelContainer(for: [CompletedSession.self, ScheduledSession.self], inMemory: true)
 }
 
 #Preview("Session Active") {
@@ -109,5 +150,6 @@ struct HomeView: View {
     HomeView(viewModel: vm, navigationPath: $path)
         .environment(ThemeManager.shared)
         .preferredColorScheme(.dark)
+        .modelContainer(for: [CompletedSession.self, ScheduledSession.self], inMemory: true)
         .onAppear { vm.selectMode(.focus); vm.start() }
 }
